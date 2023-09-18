@@ -1,6 +1,3 @@
-import {
-  BadRequestException
-} from '@nestjs/common'
 import { InvalidParamError } from '@app/errors/InvalidParamError';
 import { MissingParamError } from '@app/errors/MissingParamError';
 import { makeHash } from '@app/protocols/crypto/hash/makeHash';
@@ -63,8 +60,8 @@ export class User {
 
     if (!isValid) {
       return {
-        body: body,
-        statusCode: statusCode,
+        body,
+        statusCode,
       };
     }
 

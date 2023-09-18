@@ -5,6 +5,7 @@ import { ImagesModule } from './controllers/images/images.module';
   imports: [
     UsersModule,
     ImagesModule,
+    ProductsModule,
     
   ],
 })

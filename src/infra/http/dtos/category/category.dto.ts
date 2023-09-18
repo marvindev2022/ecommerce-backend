@@ -1,4 +1,5 @@
-import { Product } from "../Products/registerProduct.dto";
+import { Product } from "@domain/Product/Product";
+
 
 export interface Category {
     id: string;
