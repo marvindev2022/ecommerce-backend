@@ -22,7 +22,6 @@ export class EmailAlreadyExistsMiddleware implements NestMiddleware {
       where: { email },
       select: { email: true },
     });
-    console.log(databaseRegister);
     if (databaseRegister?.email) {
       throw new BadRequestException('Email já está em uso!');
     }
