@@ -1,5 +1,5 @@
 
-import { Product } from "../Products/registerProduct.dto";
+import { Product } from "@prisma/client";
 import { RegisterUserDTO } from "../User/registerUser.dto";
 
 export interface Cart  {

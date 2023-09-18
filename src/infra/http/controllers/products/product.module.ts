@@ -15,7 +15,7 @@ import { ProductsDatabaseModule } from '@infra/database/prisma/repositories/pris
   providers:[ProductService,PrismaService]
 })
 
-export class ProductModule implements NestModule{
+export class ProductsModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
       consumer
       .apply(ValidateToken)
