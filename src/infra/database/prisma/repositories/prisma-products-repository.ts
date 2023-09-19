@@ -89,9 +89,7 @@ export class PrismaProductRepository implements ProductRepository {
           ...updatedProduct,
         },
       });
-      console.log(updatedProduct)
     } catch (error) {
-      console.log(error)
       throw new BadRequestException('Erro ao atualizar o produto', {
         cause: error as Error,
       });
