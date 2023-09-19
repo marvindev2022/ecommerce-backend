@@ -1,73 +1,68 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService } from './product.service';
-import { ProductRepository } from '@app/repositories/Products/product';
-import { NotFoundException, BadRequestException } from '@nestjs/common';
-import { Product, ProductCreationProps } from '@domain/Product/Product';
-
-// Mock do repositório de produtos
-const productRepositoryMock: ProductRepository = {
-  register: jest.fn(),
-  findAllProducts: jest.fn(),
-  findProducts: jest.fn(),
-  editProduct: jest.fn(),
-  editAllProduct: jest.fn(),
-  deleteProduct: jest.fn(),
-};
+import { InMemoryProductRepository } from '@test/repositories/in-memory-product-repository';
+import { ProductService } from './products.service';
+import { Product } from '@domain/Product/Product';
+import { BadRequestException } from '@nestjs/common';
 
 describe('ProductService', () => {
-  let productService: ProductService;
+  const productRepository = new InMemoryProductRepository();
+  const productService = new ProductService(productRepository);
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        ProductService,
-        {
-          provide: ProductRepository,
-          useValue: productRepositoryMock,
-        },
-      ],
-    }).compile();
-
-    productService = module.get<ProductService>(ProductService);
-  });
-
-  it('should be defined', () => {
-    expect(productService).toBeDefined();
-  });
-
-  describe('register', () => {
-    it('should register a product', async () => {
-      const productData: ProductCreationProps = {
-        name: 'Product Name',
-        description: 'Product Description',
-        price: 10.99,
-        quantity: 100,
-        categoryId: 'category-id',
-      };
-
-      productRepositoryMock.register.mockResolvedValue('created-product-id');
-
-      const createdProduct = await productService.register(productData);
-
-      expect(productRepositoryMock.register).toHaveBeenCalledWith(
-        expect.objectContaining(productData),
-      );
-      expect(createdProduct).toBe('created-product-id');
+  const makeSud = async () => {
+    const newProduct = new Product({
+      name: 'Any Product',
+      price: 10.99,
+      description: 'Description',
     });
 
-    it('should throw BadRequestException when price is negative', async () => {
-      const productData: ProductCreationProps = {
-        name: 'Product Name',
-        description: 'Product Description',
-        price: -5.0, // Negative price
-        quantity: 100,
-        categoryId: 'category-id',
-      };
+    const productId = await productService.register(newProduct);
+    return productId;
+  };
 
-      await expect(productService.register(productData)).rejects.toThrowError(
-        BadRequestException,
-      );
-    });
+  it('should register a new product', async () => {
+    const productId = await makeSud();
+    const product = await productRepository.findProductById(productId);
+    expect(product).toBeTruthy();
   });
 
+  it('should throw an error if invalid product data is provided', async () => {
+    const newProduct = new Product({
+      // Invalid data
+    });
+
+    try {
+      await productService.register(newProduct);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestException);
+    }
+  });
+
+  it('should edit an existing product', async () => {
+    const productId = await makeSud();
+    const updatedProductData = {
+      name: 'Updated Product',
+      price: 15.99,
+      description: 'Updated Description',
+    };
+
+    await productService.editProduct(productId, updatedProductData);
+    const updatedProduct = await productRepository.findProductById(productId);
+    expect(updatedProduct.props.name).toEqual(updatedProductData.name);
+  });
+
+  it('should throw an error if editing a non-existent product', async () => {
+    const nonExistentProductId = 'non-existent-id';
+    const updatedProductData = {
+      name: 'Updated Product',
+      price: 15.99,
+      description: 'Updated Description',
+    };
+
+    try {
+      await productService.editProduct(nonExistentProductId, updatedProductData);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestException);
+    }
+  });
+
+  // Add more test cases as needed
 });

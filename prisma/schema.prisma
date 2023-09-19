@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(uuid()) @map("user_id")
+  id       String   @id @default(uuid()) @map("userId")
   name     String   @unique
   email    String   @unique
   password String
@@ -22,7 +22,7 @@ model User {
 }
 
 model Address {
-  id         String @id @default(uuid()) @map("address_id")
+  id         String @id @default(uuid()) @map("addressId")
   cep        String
   complement String?
   number     String?
@@ -44,13 +44,13 @@ model Product {
 }
 
 model Category {
-  id       String    @id @default(uuid()) @map("category_id")
+  id       String    @id @default(uuid()) @map("categoryId")
   name     String
   products Product[]
 }
 
 model Cart {
-  id         String  @id @default(uuid()) @map("cart_id")
+  id         String  @id @default(uuid()) @map("cartId")
   userId     String
   productId  String  @unique
   quantity   Int
@@ -60,7 +60,7 @@ model Cart {
 }
 
 model Order {
-  id         String  @id @default(uuid()) @map("order_id")
+  id         String  @id @default(uuid()) @map("orderId")
   userId     String
   productId  String  @unique
   quantity   Int

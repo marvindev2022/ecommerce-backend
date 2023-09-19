@@ -51,7 +51,7 @@ export class ProductsController {
     return { message: 'Produto editado com sucesso!' };
   }
 
-  @Put(':id/editAll')
+  @Put(':id/update')
   async editAllProduct(
     @Body() editProductDTO: any,
     @Param('id') id: string,

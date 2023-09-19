@@ -19,10 +19,9 @@ export class PrismaProductRepository implements ProductRepository {
         });
       }
 
-      
       const { id } = await this.prismaService.product.create({
         data: {
-          ...product,
+          ...product.props,
           photo: ['',''],
         },
         select: {
@@ -32,6 +31,7 @@ export class PrismaProductRepository implements ProductRepository {
 
       return id;
     } catch (error) {
+      console.log(error)
       throw new BadRequestException('Erro ao registrar o produto', {
         cause: error as Error,
       });
@@ -83,14 +83,14 @@ export class PrismaProductRepository implements ProductRepository {
     updatedProduct: any,
   ): Promise<any> {
     try {
-      await this.prismaService.product.update({
+     const a =  await this.prismaService.product.update({
         where: { id: productId },
         data: {
-          ...updatedProduct.props,
+          ...updatedProduct,
         },
       });
     } catch (error) {
-      throw new BadRequestException('Erro ao editar o produto', {
+      throw new BadRequestException('Erro ao atualizar o produto', {
         cause: error as Error,
       });
     }

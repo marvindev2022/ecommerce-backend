@@ -68,16 +68,11 @@ export class UsersController {
   }
 
   @Put(':id')
-  @UseInterceptors(FileInterceptor('photo'))
   async edit(
     @Param('id') id: string,
     @Body() editUserDTO: EditUserDTO,
-    @UploadedFile() photoFile: Express.Multer.File,
   ) {
-    if (photoFile) {
-      const imagePath = `uploads/${photoFile.filename}`;
-      editUserDTO.photo = imagePath;
-    }
+    
 
     await this.userService.edit(id, editUserDTO);
 
