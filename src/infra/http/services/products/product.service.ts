@@ -51,7 +51,7 @@ export class ProductService {
       throw new NotFoundException('Product not found');
     }
 
-    const updatedProduct = await this.productRepository.editProduct(
+    const updatedProduct = await this.productRepository.editAllProduct(
       productId,
       productData,
     );

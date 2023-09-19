@@ -58,7 +58,6 @@ export class Product {
       price: z.number().min(0.01, { message: 'Invalid' }),
       quantity: z.number().int().min(1, { message: 'Invalid' }),
       categoryId: z.string().min(6, { message: 'Invalid' }),
-      category: z.string().min(6, { message: 'Invalid' }),
     });
 
     const productIsValid = productSchema.safeParse(params);

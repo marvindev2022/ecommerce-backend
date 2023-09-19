@@ -10,7 +10,6 @@ import { Order } from "../Order/order.dto";
     price: number;
     photo?: string;
     quantity: number;
-    image: string;
     categoryId: string;
     category: Category;
     cart?: Cart; 
